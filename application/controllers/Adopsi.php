@@ -21,9 +21,36 @@ class Adopsi extends CI_Controller {
             'alasan' => $this->input->post('alasan'),
             'status' => 'Pending'
         ];
-        
-
+    
         $this->Adopsi_model->insert($data);
-        echo "<script>alert('Permohonan adopsi berhasil dikirim!'); window.location='".site_url('hewan')."';</script>";
+    
+        // Ambil data hewan & email pemilik
+        $hewan = $this->db->get_where('hewan', ['id' => $data['hewan_id']])->row_array();
+        $email_pemilik = $hewan['email_pemilik']; // Pastikan kolom ini ada di tabel
+    
+        // Load library email
+        $this->load->library('email');
+    
+        // Konfigurasi email
+        $this->email->from('no-reply@adopt.com', 'Adopt System');
+        $this->email->to($email_pemilik); 
+        $this->email->subject('Permohonan Adopsi Baru');
+        
+        $message = "
+            <h3>Permohonan Adopsi Baru</h3>
+            <p><strong>Nama Pemohon:</strong> {$data['nama_pemohon']}</p>
+            <p><strong>Kontak:</strong> {$data['kontak']}</p>
+            <p><strong>Alasan:</strong> {$data['alasan']}</p>
+            <p><strong>Hewan yang Diajukan:</strong> {$hewan['nama']}</p>
+        ";
+    
+        $this->email->message($message);
+    
+        if ($this->email->send()) {
+            echo "<script>alert('Permohonan adopsi berhasil dikirim!'); window.location='".site_url('hewan')."';</script>";
+        } else {
+            echo "<script>alert('Gagal mengirim email notifikasi'); window.location='".site_url('hewan')."';</script>";
+        }
     }
+    
 }

@@ -4,6 +4,9 @@
 <head>
     <title>Daftar Hewan</title>
 </head>
+<a href="<?php echo base_url('auth/logout'); ?>" style="float: right; margin-right: 20px; color: red;">
+    Logout
+</a>
 
 <body>
     <h2>Daftar Hewan untuk Adopsi</h2>

@@ -15,4 +15,10 @@
     <br><br>
 
     <button type="submit">Kirim Permohonan</button>
+    <li>
+    <a href="<?= base_url('chat'); ?>" class="btn btn-primary">
+        💬 Chat
+    </a>
+</li>
+
 </form>

@@ -57,3 +57,18 @@ $route['hewan/tambah'] = 'Hewan/tambah';
 $route['hewan/edit/(:num)'] = 'Hewan/edit/$1';
 $route['hewan/hapus/(:num)'] = 'Hewan/hapus/$1';
 $route['hewan/detail/(:num)'] = 'hewan/detail/$1';
+$route['chat'] = 'Chat';
+$route['chat/send'] = 'Chat/send_message';
+$route['chat/messages/(:num)/(:num)'] = 'Chat/get_messages/$1/$2';
+$route['chat/read'] = 'Chat/mark_as_read';
+$route['chat/send'] = 'chat/send';
+$route['chat'] = 'chat/index';
+$route['auth'] = 'auth/index';
+$route['auth/login'] = 'auth/index';
+$route['auth/register'] = 'auth/register';
+$route['auth/login'] = 'auth/login';
+$route['hewan'] = 'hewan/index';
+
+
+
+

@@ -1,0 +1,104 @@
+/* Styling untuk body agar memiliki background gradient */
+body {
+    background: linear-gradient(to right, #a8e6cf, #dcedc1);
+    font-family: Arial, sans-serif;
+}
+
+/* Container utama chat */
+.chat-container {
+    max-width: 900px;
+    margin: auto;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+/* Sidebar untuk daftar user */
+.chat-list {
+    background: #2c3e50;
+    color: white;
+    padding: 10px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.search-bar input {
+    border-radius: 20px;
+}
+
+.chat-users {
+    list-style: none;
+    padding: 0;
+}
+
+.chat-users .list-group-item {
+    background: transparent;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.chat-users .list-group-item.active {
+    background: #1abc9c;
+    color: white;
+    font-weight: bold;
+}
+
+/* Chat box styling */
+.chat-box {
+    background: #ecf0f1;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.chat-header {
+    background: #3498db;
+    color: white;
+    border-top-right-radius: 10px;
+}
+
+.chat-body {
+    height: 400px;
+    overflow-y: auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Styling untuk chat bubble */
+.message {
+    padding: 10px;
+    border-radius: 10px;
+    margin: 5px;
+    max-width: 60%;
+    word-wrap: break-word;
+}
+
+.sent {
+    background: #1abc9c;
+    color: white;
+    align-self: flex-end;
+}
+
+.received {
+    background: #bdc3c7;
+    align-self: flex-start;
+}
+
+/* Input dan tombol kirim */
+.chat-footer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#chat-input {
+    flex: 1;
+    border-radius: 20px;
+    padding: 10px;
+}
+
+#send-message {
+    border-radius: 20px;
+}
