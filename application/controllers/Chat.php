@@ -3,79 +3,65 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Chat extends CI_Controller
 {
+
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('Chat_model');
-        $this->load->helper('url');
+        $this->load->model('Chat_model'); // Load model chat
     }
 
-    public function send() 
+    // Mengirim pesan ke database
+    public function send_message()
+    {
+        $data = [
+            'hewan_id' => $this->input->post('hewan_id'),
+            'sender' => $this->input->post('sender'),
+            'receiver' => $this->input->post('receiver'),
+            'message' => $this->input->post('message'),
+            'read_status' => 'unread'
+        ];
+        $this->Chat_model->insert_message($data);
+    }
+
+    // Mengambil semua pesan berdasarkan hewan_id
+    public function load_messages()
     {
         $hewan_id = $this->input->post('hewan_id');
-        $sender = $this->input->post('sender');
-        $receiver = $this->input->post('receiver');
-        $message = trim($this->input->post('message')); // Trim untuk hapus spasi kosong di awal/akhir
+        $user_id = $this->session->userdata('user_id'); // Ambil user yang sedang login
+        $messages = $this->Chat_model->get_messages($hewan_id);
 
-        // Validasi input
-        if (empty($hewan_id) || empty($sender) || empty($receiver) || empty($message)) {
-            echo json_encode(['status' => 'error', 'message' => 'Data tidak boleh kosong!']);
-            return;
-        }
-
-        $data = [
-            'hewan_id'    => $hewan_id,
-            'sender'      => $sender,
-            'receiver'    => $receiver,
-            'message'     => $message,
-            'read_status' => 'unread',
-            'created_at'  => date('Y-m-d H:i:s')
-        ];
-
-        $insert = $this->db->insert('chat', $data);
-        if ($insert) {
-            echo json_encode(['status' => 'success']);
-        } else {
-            echo json_encode(['status' => 'error', 'message' => 'Gagal menyimpan pesan']);
+        foreach ($messages as $msg) {
+            $class = ($msg->sender == $user_id) ? 'sent' : 'received';
+            echo "<div class='chat-message $class'><strong>{$msg->message}</strong><br><small>{$msg->timestamp}</small></div>";
         }
     }
 
-    public function get_messages($hewan_id = null, $user_id = null)
-    {
-        if (!$hewan_id || !$user_id) {
-            echo json_encode(['status' => 'error', 'message' => 'Parameter tidak valid!']);
-            return;
-        }
 
-        $messages = $this->Chat_model->get_chat_by_hewan($hewan_id, $user_id);
 
-        if ($messages) {
-            echo json_encode($messages);
-        } else {
-            echo json_encode(['status' => 'error', 'message' => 'Tidak ada pesan']);
-        }
-    }
+    public function start($encoded_email)
+{
+    $email_pemilik = base64_decode($encoded_email); // Decode email
 
-    public function mark_as_read()
-    {
-        $chat_id = $this->input->post('chat_id');
+    // Langsung redirect ke halaman chat
+    redirect('chat/conversation/' . urlencode($encoded_email));
+}
 
-        if (!$chat_id) {
-            echo json_encode(['status' => 'error', 'message' => 'Chat ID tidak valid!']);
-            return;
-        }
+public function conversation($email_pemilik)
+{
+    // Debug: Cek email yang diterima
+    echo "Email Pemilik: " . urldecode($email_pemilik) . "<br>";
 
-        $update = $this->Chat_model->update_read_status($chat_id);
-        if ($update) {
-            echo json_encode(['status' => 'success']);
-        } else {
-            echo json_encode(['status' => 'error', 'message' => 'Gagal memperbarui status pesan']);
-        }
-    }
+    // Ambil data hewan berdasarkan email pemilik
+    $hewan = $this->db->get_where('hewan', ['email_pemilik' => urldecode($email_pemilik)])->row();
 
-    public function index()
-    {
-        $data['chats'] = $this->Chat_model->get_all_messages();
-        $this->load->view('chat', $data);
+    // Debug: Cek apakah data ditemukan
+    if ($hewan) {
+        echo "Hewan ditemukan: " . $hewan->id;
+        redirect('chat/start/' . $hewan->id);
+    } else {
+        echo "Pemilik tidak ditemukan.";
     }
 }
+
+}
+

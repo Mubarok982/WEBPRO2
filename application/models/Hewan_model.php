@@ -30,4 +30,19 @@ class Hewan_model extends CI_Model {
     return $this->db->insert('hewan', $data);
 }
 
+public function get_email_pemilik($id_hewan) {
+    $this->db->select('email_pemilik');
+    $this->db->where('id', $id_hewan);
+    return $this->db->get('hewan')->row_array();
+}
+
+
+
+    public function getById($id)
+    {
+        return $this->db->get_where('hewan', ['id' => $id])->row();
+    }
+
+
+
 }

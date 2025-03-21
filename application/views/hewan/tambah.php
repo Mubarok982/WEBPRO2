@@ -21,8 +21,12 @@
         <label>Deskripsi:</label>
         <textarea name="deskripsi" required></textarea><br>
 
+        <label>Email Pemilik:</label>
+        <input type="email" name="email_pemilik" required><br>
+
         <label>Gambar:</label>
         <input type="file" name="gambar" required><br>
+       
 
         <button type="submit">Simpan</button>
     </form>

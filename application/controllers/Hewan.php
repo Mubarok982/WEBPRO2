@@ -19,51 +19,16 @@ class Hewan extends CI_Controller {
     }
 
     public function simpan(){
-        // Konfigurasi upload
-        $config['upload_path']   = './uploads/';
-        $config['allowed_types'] = 'jpg|jpeg|png|gif';
-        $config['max_size']      = 2048; // 2MB
+        $config = [
+            'upload_path'   => './uploads/',
+            'allowed_types' => 'jpg|jpeg|png|gif',
+            'max_size'      => 2048
+        ];
 
         $this->upload->initialize($config);
+        $gambar = '';
 
-        if (!$this->upload->do_upload('gambar')) {
-            echo "Upload gagal! " . $this->upload->display_errors();
-            return;
-        } else {
-            $upload_data = $this->upload->data();
-            $gambar = $upload_data['file_name'];
-
-            $data = [
-                'nama' => $this->input->post('nama'),
-                'jenis' => $this->input->post('jenis'),
-                'usia' => $this->input->post('usia'),
-                'deskripsi' => $this->input->post('deskripsi'),
-                'gambar' => $gambar,
-                'status' => 'Tersedia',
-            ];
-
-            $this->Hewan_model->insert($data);
-            redirect('hewan');
-        }
-    }
-
-    public function edit($id) {
-        $data['hewan'] = $this->Hewan_model->get_by_id($id);
-        $this->load->view('hewan/edit', $data);
-    }
-
-    public function update(){
-        $id = $this->input->post('id');
-
-        // Cek apakah ada gambar baru yang diunggah
         if (!empty($_FILES['gambar']['name'])) {
-            // Konfigurasi upload
-            $config['upload_path']   = './uploads/';
-            $config['allowed_types'] = 'jpg|jpeg|png|gif';
-            $config['max_size']      = 2048; // 2MB
-
-            $this->upload->initialize($config);
-
             if (!$this->upload->do_upload('gambar')) {
                 echo "Upload gagal! " . $this->upload->display_errors();
                 return;
@@ -71,9 +36,6 @@ class Hewan extends CI_Controller {
                 $upload_data = $this->upload->data();
                 $gambar = $upload_data['file_name'];
             }
-        } else {
-            // Jika tidak ada gambar baru, gunakan gambar lama
-            $gambar = $this->input->post('gambar_lama');
         }
 
         $data = [
@@ -83,6 +45,44 @@ class Hewan extends CI_Controller {
             'deskripsi' => $this->input->post('deskripsi'),
             'gambar' => $gambar,
             'status' => 'Tersedia',
+            'email_pemilik' => $this->input->post('email_pemilik')
+        ];
+
+        $this->Hewan_model->insert($data);
+        redirect('hewan');
+    }
+
+    public function edit($id) {
+        $data['hewan'] = $this->Hewan_model->get_by_id($id);
+        $this->load->view('hewan/edit', $data);
+    }
+
+    public function update(){
+        $id = $this->input->post('id');
+        $gambar = $this->input->post('gambar_lama');
+
+        if (!empty($_FILES['gambar']['name'])) {
+            $config = [
+                'upload_path'   => './uploads/',
+                'allowed_types' => 'jpg|jpeg|png|gif',
+                'max_size'      => 2048
+            ];
+            $this->upload->initialize($config);
+
+            if ($this->upload->do_upload('gambar')) {
+                $upload_data = $this->upload->data();
+                $gambar = $upload_data['file_name'];
+            }
+        }
+
+        $data = [
+            'nama' => $this->input->post('nama'),
+            'jenis' => $this->input->post('jenis'),
+            'usia' => $this->input->post('usia'),
+            'deskripsi' => $this->input->post('deskripsi'),
+            'gambar' => $gambar,
+            'status' => 'Tersedia',
+            'email_pemilik' => $this->input->post('email_pemilik')
         ];
 
         $this->Hewan_model->update($id, $data);
@@ -99,7 +99,11 @@ class Hewan extends CI_Controller {
         if (!$data['hewan']) {
             show_404();
         }
+
+        if ($data['hewan']) {
+            $data['email_pemilik'] = $data['hewan']['email_pemilik']; // Tambahkan ini
+        }
         $this->load->view('hewan/detail', $data);
     }
-    
 }
+

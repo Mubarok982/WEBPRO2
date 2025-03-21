@@ -11,8 +11,13 @@
     <p><strong>Usia:</strong> <?= $hewan['usia']; ?> tahun</p>
     <p><strong>Deskripsi:</strong> <?= $hewan['deskripsi']; ?></p>
 
-    <a href="<?= site_url('adopsi/form/' . $hewan['id']); ?>">Ajukan Adopsi</a>
-    <br>
+    <?php if (isset($hewan['email_pemilik']) && !empty($hewan['email_pemilik'])): ?>
+        <?php $encoded_email = base64_encode($hewan['email_pemilik']); ?>
+        <a href="<?= site_url('chat/start/' . $encoded_email); ?>" class="btn btn-primary">Hubungi Adopter</a>
+    <?php else: ?>
+        <p class="text-danger">Adopter tidak ditemukan.</p>
+    <?php endif; ?>
+
     <a href="<?= site_url('hewan'); ?>">Kembali</a>
 </body>
 </html>

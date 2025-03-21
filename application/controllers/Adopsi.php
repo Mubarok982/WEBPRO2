@@ -52,5 +52,18 @@ class Adopsi extends CI_Controller {
             echo "<script>alert('Gagal mengirim email notifikasi'); window.location='".site_url('hewan')."';</script>";
         }
     }
+
+    public function detail($id)
+{
+    $data['hewan'] = $this->Hewan_model->get_hewan_by_id($id);
     
+    if ($data['hewan']) {
+        $data['adopter_id'] = $data['hewan']->adopter_id;
+    } else {
+        $data['adopter_id'] = null;
+    }
+
+    $this->load->view('hewan/detail', $data);
+}
+
 }

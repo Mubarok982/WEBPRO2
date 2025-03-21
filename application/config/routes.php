@@ -68,7 +68,5 @@ $route['auth/login'] = 'auth/index';
 $route['auth/register'] = 'auth/register';
 $route['auth/login'] = 'auth/login';
 $route['hewan'] = 'hewan/index';
-
-
-
-
+$route['chat/start/(:any)'] = 'chat/start/$1';
+$route['chat/conversation/(:any)'] = 'chat/conversation/$1';
