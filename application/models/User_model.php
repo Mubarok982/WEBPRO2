@@ -1,23 +1,17 @@
 <?php
-class User_model extends CI_Model {
-    public function check_user($email, $password) {
-        $this->db->where('email', $email);
-        $user = $this->db->get('users')->row();
+defined('BASEPATH') or exit('No direct script access allowed');
 
-        if ($user && password_verify($password, $user->password)) {
-            return $user;
-        }
-        return false;
-    }
-
-    public function register($name, $email, $password) {
+class User_model extends CI_Model
+{
+    public function register($username, $password)
+    {
         $data = [
-            'name' => $name,
-            'email' => $email,
-            'password' => password_hash($password, PASSWORD_DEFAULT)
+            'username' => $username,
+            'password' => $password,
+            'role' => 'mahasiswa' 
         ];
-        return $this->db->insert('users', $data);
-    }
-    
-}
 
+        // Insert data user ke tabel 'user'
+        return $this->db->insert('user', $data);
+    }
+}

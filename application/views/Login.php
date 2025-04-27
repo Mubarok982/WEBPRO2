@@ -9,13 +9,16 @@
 <body class="d-flex justify-content-center align-items-center vh-100">
     <div class="card p-4 shadow" style="width: 400px;">
         <h3 class="text-center">Login</h3>
+        <!-- Menampilkan pesan error jika ada -->
         <?php if ($this->session->flashdata('error')): ?>
             <div class="alert alert-danger"><?= $this->session->flashdata('error'); ?></div>
         <?php endif; ?>
+        
+        <!-- Form login -->
         <form action="<?= site_url('auth/login') ?>" method="post">
             <div class="mb-3">
-                <label class="form-label">Email</label>
-                <input type="email" name="email" class="form-control" required>
+                <label class="form-label">Username</label>
+                <input type="text" name="username" class="form-control" required>
             </div>
             <div class="mb-3">
                 <label class="form-label">Password</label>
@@ -23,6 +26,7 @@
             </div>
             <button type="submit" class="btn btn-primary w-100">Login</button>
         </form>
+        
         <p class="text-center mt-2">Belum punya akun? <a href="<?= site_url('auth/register') ?>">Daftar di sini</a></p>
     </div>
 </body>

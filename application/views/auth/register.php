@@ -9,20 +9,20 @@
 <body class="d-flex justify-content-center align-items-center vh-100">
     <div class="card p-4 shadow" style="width: 400px;">
         <h3 class="text-center">Register</h3>
+        
         <?php if ($this->session->flashdata('error')): ?>
             <div class="alert alert-danger"><?= $this->session->flashdata('error'); ?></div>
         <?php endif; ?>
+     
         <?php if ($this->session->flashdata('success')): ?>
             <div class="alert alert-success"><?= $this->session->flashdata('success'); ?></div>
         <?php endif; ?>
+
+        <!-- Form registrasi -->
         <form action="<?= site_url('auth/store_user') ?>" method="post">
             <div class="mb-3">
-                <label class="form-label">Nama</label>
-                <input type="text" name="name" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Email</label>
-                <input type="email" name="email" class="form-control" required>
+                <label class="form-label">Username</label>
+                <input type="text" name="username" class="form-control" required>
             </div>
             <div class="mb-3">
                 <label class="form-label">Password</label>
